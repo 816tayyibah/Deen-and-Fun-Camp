@@ -25,9 +25,9 @@
   .info-box .ilbl { font-size: 10px; color: #c8e6c9; margin-top: 3px; line-height: 1.3; }
   .card { background: #fff; border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 420px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
   .card-title { font-size: 15px; font-weight: 700; color: #1a472a; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
-  input[type=text] { width: 100%; padding: 13px 14px; border: 2px solid #c8e6c9; border-radius: 12px; font-size: 15px; outline: none; transition: border-color .2s; }
-  input[type=text]:focus { border-color: #2d6a4f; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; margin-top: 14px; }
+  input[type=text], input[type=number] { width: 100%; padding: 13px 14px; border: 2px solid #c8e6c9; border-radius: 12px; font-size: 15px; outline: none; transition: border-color .2s; }
+  input[type=text]:focus, input[type=number]:focus { border-color: #2d6a4f; }
   .btn-submit { width: 100%; margin-top: 18px; padding: 14px; background: linear-gradient(135deg, #2d6a4f, #52b788); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(45,106,79,.35); transition: opacity .2s; }
   .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
   .success-banner { display: none; background: #e8f5e9; border: 2px solid #52b788; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; text-align: center; }
@@ -37,13 +37,12 @@
   .registered-list { margin-bottom: 16px; }
   .registered-list p { font-size: 12px; font-weight: 600; color: #2d6a4f; margin-bottom: 6px; }
   .registered-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #f8fdf8; border-radius: 8px; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: #1a472a; }
-  .registered-item span { font-size: 16px; }
   .closed-box { text-align: center; padding: 24px 16px; }
   .closed-box .big { font-size: 52px; margin-bottom: 12px; }
   .closed-box h3 { font-size: 18px; font-weight: 700; color: #c0392b; margin-bottom: 8px; }
   .closed-box p  { font-size: 14px; color: #444; line-height: 1.7; }
   .closed-box .hi { color: #1a3c8f; font-weight: 700; }
-  .error-msg { color: #c0392b; font-size: 13px; margin-top: 8px; display: none; }
+  .error-msg { color: #c0392b; font-size: 13px; margin-top: 8px; display: none; background: #fff5f5; padding: 8px 12px; border-radius: 8px; border: 1px solid #ffcccc; }
   .status-dot { font-size: 11px; color: #888; text-align: center; margin-bottom: 14px; }
   .footer { margin-top: 28px; text-align: center; color: rgba(255,255,255,.45); font-size: 11px; }
 </style>
@@ -79,8 +78,13 @@
 
   <div id="formSection">
     <div class="card-title">✏️ Register Your Child</div>
-    <label for="childName">Child's Full Name</label>
+
+    <label for="childName">Child's Full Name <span style="color:#888;font-weight:400">(First + Last name, capital letters)</span></label>
     <input type="text" id="childName" placeholder="e.g. Ahmed Ali Khan" maxlength="60"/>
+
+    <label for="childAge">Child's Age <span style="color:#888;font-weight:400">(numbers only — e.g. 8)</span></label>
+    <input type="number" id="childAge" placeholder="Enter age e.g. 8" inputmode="numeric" pattern="[0-9]*"/>
+
     <div class="error-msg" id="errorMsg"></div>
     <button class="btn-submit" id="submitBtn" onclick="submitRegistration()">Register Now ✓</button>
   </div>
@@ -143,21 +147,27 @@ function updateRegisteredList() {
   if (sessionRegistered.length === 0) return;
   document.getElementById('registeredList').style.display = 'block';
   document.getElementById('registeredItems').innerHTML = sessionRegistered.map(n =>
-    `<div class="registered-item"><span>✅</span>${n}</div>`
+    `<div class="registered-item">✅ ${n}</div>`
   ).join('');
 }
 
 window.submitRegistration = async function() {
-  const inp  = document.getElementById('childName');
-  const name = inp.value.trim();
+  const nameInp = document.getElementById('childName');
+  const ageInp  = document.getElementById('childAge');
+  const name = nameInp.value.trim();
+  const age  = parseInt(ageInp.value);
   const errEl = document.getElementById('errorMsg');
-  const btn  = document.getElementById('submitBtn');
+  const btn   = document.getElementById('submitBtn');
 
   errEl.style.display = 'none';
   document.getElementById('successBanner').style.display = 'none';
 
-  if (!name) { errEl.textContent = "Please enter your child's full name."; errEl.style.display = 'block'; return; }
-  if (name.length < 3) { errEl.textContent = 'Please enter a full name (at least 3 characters).'; errEl.style.display = 'block'; return; }
+  if (!name) { errEl.textContent = "⚠️ Please enter your child's full name."; errEl.style.display = 'block'; return; }
+  if (name.length < 3) { errEl.textContent = '⚠️ Please enter the full name (at least 3 characters).'; errEl.style.display = 'block'; return; }
+  if (!/^[A-Z]/.test(name)) { errEl.textContent = '⚠️ Name must start with a capital letter. e.g. Ahmed Ali'; errEl.style.display = 'block'; return; }
+  if (!name.includes(' ')) { errEl.textContent = '⚠️ Please enter the full name (first + last name).'; errEl.style.display = 'block'; return; }
+  const ageVal = ageInp.value.trim();
+  if (ageVal === '' || isNaN(ageVal) || ageVal.includes('.')) { errEl.textContent = '⚠️ Please enter age in numbers only. e.g. 8'; errEl.style.display = 'block'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Registering...';
@@ -166,37 +176,36 @@ window.submitRegistration = async function() {
     const k = safeKey(name);
     const snap = await get(ref(db, 'students/' + k));
     if (snap.exists()) {
-      errEl.textContent = 'This name is already registered!';
+      errEl.textContent = '⚠️ This name is already registered!';
       errEl.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Register Now ✓';
       return;
     }
-    await set(ref(db, 'students/' + k), { name, addedAt: Date.now() });
+    await set(ref(db, 'students/' + k), { name, age, addedAt: Date.now() });
 
-    document.getElementById('successName').textContent = name;
+    document.getElementById('successName').textContent = name + ' (Age ' + age + ')';
     document.getElementById('successBanner').style.display = 'block';
 
-    sessionRegistered.push(name);
+    sessionRegistered.push(name + ' — Age ' + age);
     updateRegisteredList();
 
-    inp.value = '';
+    nameInp.value = '';
+    ageInp.value  = '';
     btn.disabled = false;
     btn.textContent = 'Register Now ✓';
-    inp.focus();
+    nameInp.focus();
 
   } catch(e) {
-    errEl.textContent = 'Error connecting. Please check your internet and try again.';
+    errEl.textContent = '⚠️ Error connecting. Please check your internet and try again.';
     errEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'Register Now ✓';
   }
 };
 
-document.getElementById('childName').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') window.submitRegistration();
-});
+document.getElementById('childName').addEventListener('keypress', e => { if(e.key==='Enter') document.getElementById('childAge').focus(); });
+document.getElementById('childAge').addEventListener('keypress',  e => { if(e.key==='Enter') window.submitRegistration(); });
 </script>
 </body>
 </html>
-  
