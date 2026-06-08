@@ -4,105 +4,371 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="theme-color" content="#1a472a"/>
-<title>Deen & Fun Camp — Registration</title>
+<title>Deen & Fun Camp — Admin</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(160deg, #1a472a 0%, #2d6a4f 60%, #1b4332 100%);
-    display: flex; flex-direction: column; align-items: center;
-    padding: 24px 16px 40px;
-  }
-  .header { text-align: center; margin-bottom: 28px; }
-  .header-icon { font-size: 52px; margin-bottom: 10px; display: block; }
-  .header h1 { color: #ffd700; font-size: 26px; font-weight: 800; letter-spacing: .5px; text-shadow: 0 2px 6px rgba(0,0,0,.4); }
-  .header h2 { color: #fff; font-size: 18px; font-weight: 600; margin-top: 6px; }
-  .header p  { color: #a8d8a8; font-size: 13px; margin-top: 6px; }
-  .info-strip { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-bottom: 22px; }
-  .info-box { flex: 1; background: rgba(255,255,255,.13); border-radius: 12px; padding: 10px 6px; text-align: center; }
-  .info-box .inum { font-size: 18px; font-weight: 700; color: #ffd700; }
-  .info-box .ilbl { font-size: 10px; color: #c8e6c9; margin-top: 3px; line-height: 1.3; }
-  .card { background: #fff; border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 420px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
-  .card-title { font-size: 15px; font-weight: 700; color: #1a472a; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; margin-top: 14px; }
-  input[type=text], input[type=number] { width: 100%; padding: 13px 14px; border: 2px solid #c8e6c9; border-radius: 12px; font-size: 15px; outline: none; transition: border-color .2s; }
-  input[type=text]:focus, input[type=number]:focus { border-color: #2d6a4f; }
-  .btn-submit { width: 100%; margin-top: 18px; padding: 14px; background: linear-gradient(135deg, #2d6a4f, #52b788); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(45,106,79,.35); transition: opacity .2s; }
-  .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
-  .success-banner { display: none; background: #e8f5e9; border: 2px solid #52b788; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; text-align: center; }
-  .success-banner .tick { font-size: 28px; }
-  .success-banner h3 { font-size: 15px; font-weight: 700; color: #1a472a; margin: 6px 0 4px; }
-  .success-banner .child-name-display { display: inline-block; background: #fff; color: #1a472a; font-weight: 700; font-size: 15px; padding: 4px 14px; border-radius: 20px; border: 1.5px solid #52b788; }
-  .registered-list { margin-bottom: 16px; }
-  .registered-list p { font-size: 12px; font-weight: 600; color: #2d6a4f; margin-bottom: 6px; }
-  .registered-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #f8fdf8; border-radius: 8px; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: #1a472a; }
-  .closed-box { text-align: center; padding: 24px 16px; }
-  .closed-box .big { font-size: 52px; margin-bottom: 12px; }
-  .closed-box h3 { font-size: 18px; font-weight: 700; color: #c0392b; margin-bottom: 8px; }
-  .closed-box p  { font-size: 14px; color: #444; line-height: 1.7; }
-  .closed-box .hi { color: #1a3c8f; font-weight: 700; }
-  .error-msg { color: #c0392b; font-size: 13px; margin-top: 8px; display: none; background: #fff5f5; padding: 8px 12px; border-radius: 8px; border: 1px solid #ffcccc; }
-  .status-dot { font-size: 11px; color: #888; text-align: center; margin-bottom: 14px; }
-  .footer { margin-top: 28px; text-align: center; color: rgba(255,255,255,.45); font-size: 11px; }
+  body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1a472a 0%, #2d6a4f 50%, #1b4332 100%); min-height: 100vh; padding: 16px; }
+
+  .header { text-align: center; padding: 16px 0 12px; }
+  .header-icon { font-size: 36px; margin-bottom: 6px; }
+  .header h1 { color: #ffd700; font-size: 20px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,.4); }
+  .header p  { color: #a8d8a8; font-size: 12px; margin-top: 4px; }
+  .status-bar { text-align: center; font-size: 11px; color: #a8d8a8; margin-bottom: 8px; }
+  .status-bar.err { color: #ff6b6b; }
+
+  .nav-tabs { display: flex; gap: 4px; margin-bottom: 14px; background: rgba(0,0,0,.2); border-radius: 12px; padding: 4px; flex-wrap: wrap; }
+  .nav-tab { flex: 1; min-width: 60px; padding: 9px 4px; border: none; background: transparent; color: #a8d8a8; font-size: 11px; font-weight: 500; border-radius: 8px; cursor: pointer; text-align: center; white-space: nowrap; }
+  .nav-tab.active { background: #ffd700; color: #1a472a; font-weight: 700; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card { background: rgba(255,255,255,.95); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+  .card-title { font-size: 14px; font-weight: 700; color: #1a472a; margin-bottom: 12px; }
+
+  .summary-strip { display: flex; gap: 6px; margin-bottom: 12px; }
+  .summary-box { flex: 1; background: rgba(255,255,255,.15); border-radius: 10px; padding: 8px 4px; text-align: center; }
+  .summary-box .num { font-size: 20px; font-weight: 700; color: #ffd700; }
+  .summary-box .num.red { color: #ff6b6b; }
+  .summary-box .lbl { font-size: 10px; color: #a8d8a8; margin-top: 3px; line-height: 1.3; }
+
+  .today-date { background: #ffd700; color: #1a472a; font-weight: 700; font-size: 13px; padding: 6px 10px; border-radius: 20px; text-align: center; margin-bottom: 12px; }
+
+  /* Alpha index */
+  .alpha-index { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+  .alpha-btn { padding: 4px 8px; background: rgba(45,106,79,.12); border: 1px solid #c8e6c9; border-radius: 6px; font-size: 12px; font-weight: 700; color: #2d6a4f; cursor: pointer; }
+  .alpha-btn:hover { background: #2d6a4f; color: white; }
+  .alpha-header { font-size: 12px; font-weight: 700; color: #2d6a4f; background: #e8f5e9; padding: 4px 10px; border-radius: 6px; margin: 8px 0 4px; letter-spacing: 1px; }
+
+  /* Student cards */
+  .student-list { display: flex; flex-direction: column; gap: 8px; max-height: 420px; overflow-y: auto; }
+  .student-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f8fdf8; border: 1.5px solid #c8e6c9; border-radius: 14px; }
+  .student-card.marked-present { background: #d4edda; border-color: #52b788; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #2d6a4f, #52b788); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+  .s-name { font-size: 16px; font-weight: 700; color: #1a472a; }
+  .s-info { font-size: 11px; color: #444; margin-top: 2px; }
+
+  .btn-mark { padding: 8px 14px; border: none; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .btn-present { background: #52b788; color: white; }
+  .btn-absent  { background: #e9ecef; color: #555; }
+  .btn-del { padding: 5px 9px; background: #fee2e2; color: #c0392b; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; }
+
+  /* Add student */
+  .add-row { display: flex; gap: 8px; }
+  .add-row input { flex: 1; padding: 10px 12px; border: 2px solid #2d6a4f; border-radius: 10px; font-size: 14px; outline: none; }
+  .add-row input:focus { border-color: #ffd700; }
+  .btn-add { padding: 10px 14px; background: #2d6a4f; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+  /* Record table */
+  .att-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .att-table th { background: #2d6a4f; color: white; padding: 6px 4px; text-align: center; font-weight: 600; position: sticky; top: 0; }
+  .att-table th:first-child { text-align: left; padding-left: 8px; min-width: 100px; }
+  .att-table td { padding: 5px 4px; text-align: center; border-bottom: 1px solid #e9ecef; }
+  .att-table td:first-child { text-align: left; padding-left: 8px; font-weight: 600; color: #1a472a; font-size: 12px; }
+  .att-table tr:nth-child(even) { background: #f8fdf8; }
+  .dot-p { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #52b788; line-height: 14px; font-size: 8px; color: white; }
+  .dot-a { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #dee2e6; }
+  .table-wrap { overflow-x: auto; max-height: 340px; overflow-y: auto; border-radius: 8px; }
+
+  /* Ranking */
+  .rank-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f8fdf8; border: 1.5px solid #c8e6c9; border-radius: 14px; margin-bottom: 8px; }
+  .rank-num { width: 30px; height: 30px; border-radius: 50%; background: #2d6a4f; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .rank-num.gold   { background: #ffd700; color: #1a472a; }
+  .rank-num.silver { background: #c0c0c0; color: #333; }
+  .rank-num.bronze { background: #cd7f32; color: white; }
+  .rank-name { font-size: 15px; font-weight: 700; color: #1a472a; }
+  .rank-bar { height: 6px; background: #e9ecef; border-radius: 3px; margin-top: 4px; }
+  .rank-bar-fill { height: 100%; background: linear-gradient(90deg,#52b788,#2d6a4f); border-radius: 3px; }
+  .rank-count { font-size: 13px; font-weight: 700; color: #2d6a4f; white-space: nowrap; }
+
+  /* Stars */
+  .star-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #fffdf0; border: 1.5px solid #ffe082; border-radius: 14px; margin-bottom: 8px; }
+  .star-count-display { font-size: 22px; font-weight: 800; color: #f57f17; min-width: 36px; text-align: center; }
+  .star-controls { display: flex; gap: 6px; }
+  .btn-star { width: 34px; height: 34px; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-star-add { background: #ffd700; color: #1a472a; }
+  .btn-star-sub { background: #ffe082; color: #7f4f00; }
+
+  /* Points */
+  .points-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f0f4ff; border: 1.5px solid #90caf9; border-radius: 14px; margin-bottom: 8px; }
+  .points-display { font-size: 22px; font-weight: 800; color: #1565c0; min-width: 42px; text-align: center; }
+  .pts-input { width: 60px; padding: 6px 8px; border: 2px solid #90caf9; border-radius: 8px; font-size: 14px; text-align: center; outline: none; }
+  .btn-pts { padding: 7px 10px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .btn-pts-add { background: #1976d2; color: white; }
+  .btn-pts-clr { background: #e3f2fd; color: #1565c0; }
+  .pts-session-note { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .notice-box { background: #fff; border-radius: 14px; padding: 20px 16px; text-align: center; color: #111; font-size: 14px; line-height: 1.9; font-weight: 500; }
+  .notice-box .big { font-size: 36px; margin-bottom: 8px; }
+  .notice-box .hi { color: #1a3c8f; font-weight: 700; }
+  .empty-state { text-align: center; padding: 20px; color: #555; font-size: 13px; }
+  .section-note { font-size: 12px; color: #888; margin-bottom: 10px; }
+
+  .btn-clear-session { width: 100%; padding: 10px; background: #fee2e2; color: #c0392b; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+  .sub-tab { flex:1; padding:8px 4px; border:none; background:transparent; color:#a8d8a8; font-size:11px; font-weight:500; border-radius:8px; cursor:pointer; text-align:center; }
+  .sub-tab.active { background:#fff; color:#1a472a; font-weight:700; }
+  .group-card { background:#fff; border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,.1); border:1.5px solid #c8e6c9; }
+  .group-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .group-name { font-size:15px; font-weight:700; color:#1a472a; }
+  .group-pts { font-size:20px; font-weight:800; color:#2d6a4f; }
+  .pair-card { background:#f0f4ff; border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,.1); border:1.5px solid #90caf9; }
+  .member-chip { display:inline-flex; align-items:center; gap:6px; background:#e8f5e9; border:1px solid #52b788; border-radius:20px; padding:4px 10px; margin:3px; font-size:13px; font-weight:600; color:#1a472a; }
+  .member-chip-pair { display:inline-flex; align-items:center; gap:6px; background:#e3f2fd; border:1px solid #1976d2; border-radius:20px; padding:4px 10px; margin:3px; font-size:13px; font-weight:600; color:#1a472a; }
+  .btn-remove-member { background:none; border:none; color:#c0392b; cursor:pointer; font-size:14px; padding:0; }
+  .pts-row { display:flex; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .pts-small-input { width:70px; padding:6px 8px; border:2px solid #c8e6c9; border-radius:8px; font-size:14px; text-align:center; outline:none; }
+  .btn-add-pts { padding:7px 12px; background:#2d6a4f; color:white; border:none; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; }
+  .btn-del-group { padding:5px 10px; background:#fee2e2; color:#c0392b; border:none; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer; }
+  .add-member-row { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <span class="header-icon">⛺</span>
-  <h1>Deen &amp; Fun Camp 2026</h1>
-  <h2>Child Registration</h2>
-  <p>29 June – 31 July 2026 &nbsp;|&nbsp; Monday to Friday</p>
+  <div class="header-icon">⛺</div>
+  <h1>Deen &amp; Fun Camp — Admin</h1>
+  <p>29 June – 31 July 2026 &nbsp;|&nbsp; Admin Panel</p>
 </div>
 
-<div class="info-strip">
-  <div class="info-box"><div class="inum">25</div><div class="ilbl">Camp Days</div></div>
-  <div class="info-box"><div class="inum">15<br><span style="font-size:9px">June</span></div><div class="ilbl">Registration Deadline</div></div>
-  <div class="info-box"><div class="inum" id="daysLeft">—</div><div class="ilbl">Days Left to Register</div></div>
+<div class="status-bar" id="statusBar">Connecting...</div>
+<div class="summary-strip" id="summaryStrip"></div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showTab('attendance',this)">📋 Attendance</button>
+  <button class="nav-tab" onclick="showTab('students',this)">👦 Students</button>
+  <button class="nav-tab" onclick="showTab('agegroups',this)">🎨 Age Groups</button>
+  <button class="nav-tab" onclick="showTab('stars',this)">⭐ Stars</button>
+  <button class="nav-tab" onclick="showTab('points',this)">🎯 Points</button>
+  <button class="nav-tab" onclick="showTab('record',this)">📊 Record</button>
+  <button class="nav-tab" onclick="showTab('ranking',this)">🏆 Ranking</button>
+  <button class="nav-tab" onclick="showTab('sunnahs',this)">🌟 Sunnahs</button>
+  <button class="nav-tab" onclick="showTab('competition',this)">🏆 Competition</button>
 </div>
 
-<div class="card" id="mainCard">
-  <div class="status-dot" id="statusDot">Connecting...</div>
-
-  <div class="registered-list" id="registeredList" style="display:none">
-    <p>✅ Registered this session:</p>
-    <div id="registeredItems"></div>
-  </div>
-
-  <div class="success-banner" id="successBanner">
-    <div class="tick">🎉</div>
-    <h3>Registered Successfully!</h3>
-    <div class="child-name-display" id="successName"></div>
-  </div>
-
-  <div id="formSection">
-    <div class="card-title">✏️ Register Your Child</div>
-
-    <label for="childName">Child's Full Name <span style="color:#888;font-weight:400">(First + Last name, capital letters)</span></label>
-    <input type="text" id="childName" placeholder="e.g. Ahmed Ali Khan" maxlength="60"/>
-
-    <label for="childAge">Child's Age <span style="color:#888;font-weight:400">(numbers only — e.g. 8)</span></label>
-    <input type="number" id="childAge" placeholder="Enter age e.g. 8" inputmode="numeric" pattern="[0-9]*"/>
-
-    <div class="error-msg" id="errorMsg"></div>
-    <button class="btn-submit" id="submitBtn" onclick="submitRegistration()">Register Now ✓</button>
-  </div>
-
-  <div class="closed-box" id="closedSection" style="display:none">
-    <div class="big">🔒</div>
-    <h3>Registration Closed</h3>
-    <p>Registration deadline was <span class="hi">15 June 2026</span>.<br>
-    New registrations are no longer accepted.<br><br>
-    For any queries, please contact the camp organiser.</p>
+<!-- ATTENDANCE -->
+<div id="tab-attendance" class="section active">
+  <div class="card">
+    <div class="card-title">📅 Today's Attendance</div>
+    <div class="today-date" id="todayLabel"></div>
+    <div id="alphaAtt"></div>
+    <div class="student-list" id="attendanceList"><div class="empty-state">Loading...</div></div>
   </div>
 </div>
 
-<div class="footer">Deen &amp; Fun Camp 2026 &nbsp;•&nbsp; All rights reserved</div>
+<!-- STUDENTS -->
+<div id="tab-students" class="section">
+  <div class="card">
+    <div class="card-title">👦 Add Student Manually</div>
+    <div class="add-row">
+      <input type="text" id="studentInput" placeholder="Child's full name..." onkeypress="if(event.key==='Enter')addStudent()"/>
+      <button class="btn-add" onclick="addStudent()">+ Add</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 All Students (<span id="studentCount">0</span>)</div>
+    <div class="student-list" id="studentMgmtList"><div class="empty-state">Loading...</div></div>
+  </div>
+</div>
 
+<!-- AGE GROUPS -->
+<div id="tab-agegroups" class="section">
+  <div class="card">
+    <div class="card-title">🎨 Age Group Filter</div>
+    <p class="section-note">Enter an age range to see matching students.</p>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:13px;font-weight:600;color:#333;margin:0;">From</label>
+        <input type="number" id="ageFrom" placeholder="e.g. 6" min="1" max="20" inputmode="numeric"
+          style="width:70px;padding:8px 10px;border:2px solid #c8e6c9;border-radius:10px;font-size:14px;outline:none;"/>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:13px;font-weight:600;color:#333;margin:0;">To</label>
+        <input type="number" id="ageTo" placeholder="e.g. 9" min="1" max="20" inputmode="numeric"
+          style="width:70px;padding:8px 10px;border:2px solid #c8e6c9;border-radius:10px;font-size:14px;outline:none;"/>
+      </div>
+      <button onclick="filterByAge()" style="padding:9px 18px;background:#2d6a4f;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Search</button>
+      <button onclick="clearAgeFilter()" style="padding:9px 14px;background:#e9ecef;color:#555;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Clear</button>
+    </div>
+    <div id="ageGroupResult"></div>
+  </div>
+</div>
+
+<!-- STARS -->
+<div id="tab-stars" class="section">
+  <div class="card">
+    <div class="card-title">⭐ Star Tracker</div>
+    <p class="section-note">Tap ⭐ to add a star, tap − to remove. Stars are saved permanently.</p>
+    <div id="starsList"><div class="empty-state">Loading...</div></div>
+  </div>
+</div>
+
+<!-- POINTS -->
+<div id="tab-points" class="section">
+  <div class="card">
+    <div class="card-title">🎯 Game / Quiz Points</div>
+    <p class="section-note">Enter points per child for this session. Press "Clear All" when the game ends.</p>
+    <div id="pointsList"><div class="empty-state">Loading...</div></div>
+    <button class="btn-clear-session" onclick="clearAllPoints()">🗑 Clear All Points (Game Over)</button>
+  </div>
+</div>
+
+<!-- RECORD -->
+<div id="tab-record" class="section">
+  <div class="card">
+    <div class="card-title">📊 Full Attendance Record</div>
+    <div class="table-wrap">
+      <table class="att-table"><thead id="recordHead"></thead><tbody id="recordBody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- RANKING -->
+<div id="tab-ranking" class="section">
+  <div class="card">
+    <div class="card-title">🏆 Attendance Ranking</div>
+    <div id="rankingList"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">⭐ Star Ranking</div>
+    <div id="starRankingList"></div>
+  </div>
+</div>
+
+<!-- SUNNAHS -->
+<div id="tab-sunnahs" class="section">
+  <div class="card">
+    <div class="card-title">🌟 Sunnah Tracker — Results</div>
+    <p class="section-note">View weekly Sunnah completion for each child. Share individual links below.</p>
+
+    <!-- Week selector -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;" id="adminWeekBtns"></div>
+    <div style="font-size:12px;font-weight:700;color:#2d6a4f;margin-bottom:12px;" id="adminWeekLbl"></div>
+
+    <!-- Ranking view -->
+    <div id="sunnahRankingList"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔗 Student Tracker Links</div>
+    <p class="section-note">Share each child's unique link. They can open it on any phone/tablet.</p>
+    <div style="margin-bottom:8px;">
+      <input type="text" id="baseLinkInput" placeholder="Paste your tracker page URL here (e.g. https://yoursite.com/Sunnah_Tracker.html)"
+        style="width:100%;padding:9px 12px;border:2px solid #2d6a4f;border-radius:10px;font-size:12px;outline:none;margin-bottom:8px;"/>
+      <button onclick="generateLinks()" style="width:100%;padding:9px;background:#2d6a4f;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">⚡ Generate Links</button>
+    </div>
+    <div id="linksListArea"></div>
+  </div>
+</div>
+
+
+<!-- COMPETITION -->
+<div id="tab-competition" class="section">
+
+  <!-- Sub-tabs -->
+  <div class="nav-tabs" style="margin-bottom:10px;">
+    <button class="sub-tab active" onclick="showSubTab('groups',this)" id="subtab-groups">👥 Groups / Teams</button>
+    <button class="sub-tab" onclick="showSubTab('pairs',this)" id="subtab-pairs">🤝 Pairs</button>
+    <button class="sub-tab" onclick="showSubTab('autogroup',this)" id="subtab-autogroup">⚡ Auto-Make</button>
+  </div>
+
+  <!-- GROUPS -->
+  <div class="sub-section" id="sub-groups">
+    <div class="card">
+      <div class="card-title">👥 Create a Team / Group</div>
+      <p class="section-note">Give a team name, then add members one by one. Add points during any game.</p>
+      <div class="add-row" style="margin-bottom:8px;">
+        <input type="text" id="newGroupName" placeholder="Team name (e.g. Lions, Team A)..." onkeypress="if(event.key==='Enter')createGroup()"/>
+        <button class="btn-add" onclick="createGroup()">+ Create</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 All Teams</div>
+      <div id="groupsList"><div class="empty-state">No teams yet.</div></div>
+    </div>
+  </div>
+
+  <!-- PAIRS -->
+  <div class="sub-section" id="sub-pairs" style="display:none;">
+    <div class="card">
+      <div class="card-title">🤝 Create a Pair (2 students)</div>
+      <p class="section-note">Select any two students for a head-to-head competition.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <input type="text" id="newPairName" placeholder="Pair name (e.g. Round 1)..."
+          style="padding:10px 12px;border:2px solid #2d6a4f;border-radius:10px;font-size:14px;outline:none;"/>
+        <select id="pairStudent1" style="padding:10px 12px;border:2px solid #c8e6c9;border-radius:10px;font-size:13px;outline:none;background:white;">
+          <option value="">Select Student 1</option>
+        </select>
+        <select id="pairStudent2" style="padding:10px 12px;border:2px solid #c8e6c9;border-radius:10px;font-size:13px;outline:none;background:white;">
+          <option value="">Select Student 2</option>
+        </select>
+        <button class="btn-add" onclick="createPair()">🤝 Create Pair</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 All Pairs</div>
+      <div id="pairsList"><div class="empty-state">No pairs yet.</div></div>
+    </div>
+  </div>
+
+  <!-- AUTO-MAKE -->
+  <div class="sub-section" id="sub-autogroup" style="display:none;">
+    <div class="card">
+      <div class="card-title">⚡ Auto-Make Teams or Pairs</div>
+      <p class="section-note">Automatically create balanced teams from students. Filter by age or use all.</p>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Filter by Age (optional)</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <input type="number" id="autoAgeFrom" placeholder="Age from" min="1" max="20"
+            style="width:90px;padding:8px 10px;border:2px solid #c8e6c9;border-radius:10px;font-size:13px;outline:none;"/>
+          <span style="color:#555;font-size:13px;">to</span>
+          <input type="number" id="autoAgeTo" placeholder="Age to" min="1" max="20"
+            style="width:90px;padding:8px 10px;border:2px solid #c8e6c9;border-radius:10px;font-size:13px;outline:none;"/>
+          <button onclick="previewAutoStudents()" style="padding:8px 14px;background:#2d6a4f;color:white;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;">Filter</button>
+          <button onclick="clearAutoFilter()" style="padding:8px 10px;background:#e9ecef;color:#555;border:none;border-radius:10px;font-size:12px;cursor:pointer;">Clear</button>
+        </div>
+        <div id="autoFilteredList" style="margin-top:8px;"></div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:8px;">How to divide?</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <button onclick="setAutoMode('pairs')" id="autoModePairs"
+          style="flex:1;min-width:100px;padding:10px 8px;border:2px solid #c8e6c9;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;background:#f8fdf8;color:#1a472a;">
+          🤝 Everyone in Pairs<br><span style="font-size:10px;font-weight:400;">2 students each</span>
+        </button>
+        <button onclick="setAutoMode('3')" id="autoMode3"
+          style="flex:1;min-width:100px;padding:10px 8px;border:2px solid #c8e6c9;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;background:#f8fdf8;color:#1a472a;">
+          👥 Groups of 3<br><span style="font-size:10px;font-weight:400;">3 students each</span>
+        </button>
+        <button onclick="setAutoMode('2teams')" id="autoMode2teams"
+          style="flex:1;min-width:100px;padding:10px 8px;border:2px solid #c8e6c9;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;background:#f8fdf8;color:#1a472a;">
+          🏆 2 Equal Teams<br><span style="font-size:10px;font-weight:400;">Half & half</span>
+        </button>
+        <button onclick="setAutoMode('custom')" id="autoModeCustom"
+          style="flex:1;min-width:100px;padding:10px 8px;border:2px solid #c8e6c9;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;background:#f8fdf8;color:#1a472a;">
+          ✏️ Custom Size<br><span style="font-size:10px;font-weight:400;">You choose</span>
+        </button>
+      </div>
+
+      <div id="customSizeRow" style="display:none;margin-bottom:10px;">
+        <input type="number" id="customGroupSize" placeholder="Students per group (e.g. 4)" min="2" max="20"
+          style="width:100%;padding:9px 12px;border:2px solid #2d6a4f;border-radius:10px;font-size:14px;outline:none;"/>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input type="text" id="autoTeamPrefix" placeholder="Team name prefix (e.g. Team, Lions)" value="Team"
+          style="flex:1;padding:9px 12px;border:2px solid #c8e6c9;border-radius:10px;font-size:13px;outline:none;"/>
+        <button onclick="generateAutoGroups()" style="padding:9px 16px;background:#ffd700;color:#1a472a;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;">⚡ Generate!</button>
+      </div>
+
+      <div id="autoPreviewArea"></div>
+    </div>
+  </div>
+
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, onValue, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpJATiYye-RiKj2kAKeEPxquYvOiVr3RQ",
@@ -116,96 +382,768 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-const REG_DEADLINE = new Date(2026, 5, 15, 23, 59, 59);
+const CAMP_START = new Date(2026, 5, 29);
+const CAMP_END   = new Date(2026, 6, 31);
 
-function safeKey(name) {
-  return name.trim().replace(/[.#$\[\]\/\s]/g,'_').toLowerCase();
-}
-
-const today = new Date();
-const diff = Math.ceil((REG_DEADLINE - today) / 86400000);
-const el = document.getElementById('daysLeft');
-if (diff <= 0) { el.textContent = '0'; el.style.color = '#ff6b6b'; }
-else { el.textContent = diff; }
-
-if (today > REG_DEADLINE) {
-  document.getElementById('formSection').style.display = 'none';
-  document.getElementById('closedSection').style.display = 'block';
-  document.getElementById('statusDot').textContent = '🔒 Registration closed';
-}
-
-get(ref(db, 'students')).then(() => {
-  document.getElementById('statusDot').textContent = '🟢 Connected';
-}).catch(() => {
-  document.getElementById('statusDot').textContent = '🔴 Connection error — check internet';
-  document.getElementById('statusDot').style.color = '#c0392b';
-});
-
-const sessionRegistered = [];
-
-function updateRegisteredList() {
-  if (sessionRegistered.length === 0) return;
-  document.getElementById('registeredList').style.display = 'block';
-  document.getElementById('registeredItems').innerHTML = sessionRegistered.map(n =>
-    `<div class="registered-item">✅ ${n}</div>`
-  ).join('');
-}
-
-window.submitRegistration = async function() {
-  const nameInp = document.getElementById('childName');
-  const ageInp  = document.getElementById('childAge');
-  const name = nameInp.value.trim();
-  const age  = parseInt(ageInp.value);
-  const errEl = document.getElementById('errorMsg');
-  const btn   = document.getElementById('submitBtn');
-
-  errEl.style.display = 'none';
-  document.getElementById('successBanner').style.display = 'none';
-
-  if (!name) { errEl.textContent = "⚠️ Please enter your child's full name."; errEl.style.display = 'block'; return; }
-  if (name.length < 3) { errEl.textContent = '⚠️ Please enter the full name (at least 3 characters).'; errEl.style.display = 'block'; return; }
-  if (!/^[A-Z]/.test(name)) { errEl.textContent = '⚠️ Name must start with a capital letter. e.g. Ahmed Ali'; errEl.style.display = 'block'; return; }
-  if (!name.includes(' ')) { errEl.textContent = '⚠️ Please enter the full name (first + last name).'; errEl.style.display = 'block'; return; }
-  const ageVal = ageInp.value.trim();
-  if (ageVal === '' || isNaN(ageVal) || ageVal.includes('.')) { errEl.textContent = '⚠️ Please enter age in numbers only. e.g. 8'; errEl.style.display = 'block'; return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Registering...';
-
-  try {
-    const k = safeKey(name);
-    const snap = await get(ref(db, 'students/' + k));
-    if (snap.exists()) {
-      errEl.textContent = '⚠️ This name is already registered!';
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Register Now ✓';
-      return;
-    }
-    await set(ref(db, 'students/' + k), { name, age, addedAt: Date.now() });
-
-    document.getElementById('successName').textContent = name + ' (Age ' + age + ')';
-    document.getElementById('successBanner').style.display = 'block';
-
-    sessionRegistered.push(name + ' — Age ' + age);
-    updateRegisteredList();
-
-    nameInp.value = '';
-    ageInp.value  = '';
-    btn.disabled = false;
-    btn.textContent = 'Register Now ✓';
-    nameInp.focus();
-
-  } catch(e) {
-    errEl.textContent = '⚠️ Error connecting. Please check your internet and try again.';
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Register Now ✓';
+function getCampDays() {
+  const days = [];
+  let d = new Date(CAMP_START);
+  while (d <= CAMP_END) {
+    if (d.getDay()>=1 && d.getDay()<=5) days.push(new Date(d));
+    d.setDate(d.getDate()+1);
   }
+  return days;
+}
+const campDays = getCampDays();
+
+function fmtKey(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmtDisplay(d) {
+  const dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return dn[d.getDay()]+', '+d.getDate()+' '+mn[d.getMonth()]+' '+d.getFullYear();
+}
+function fmtShort(d) { return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'); }
+function isCampDay(d) { return campDays.some(c=>fmtKey(c)===fmtKey(d)); }
+function initials(n) { return n.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function safeKey(n) { return n.trim().replace(/[.#$\[\]\/\s]/g,'_').toLowerCase(); }
+
+let students={}, attendance={}, stars={}, points={};
+
+onValue(ref(db,'students'), snap=>{
+  students = snap.val()||{};
+  document.getElementById('statusBar').textContent='🟢 Connected — live data';
+  document.getElementById('statusBar').classList.remove('err');
+  renderAll();
+}, ()=>{
+  document.getElementById('statusBar').textContent='🔴 Connection error';
+  document.getElementById('statusBar').classList.add('err');
+});
+onValue(ref(db,'attendance'), snap=>{ attendance=snap.val()||{}; renderAll(); });
+onValue(ref(db,'stars'),      snap=>{ stars=snap.val()||{};      renderAll(); });
+onValue(ref(db,'points'),     snap=>{ points=snap.val()||{};     renderAll(); });
+
+function getStudentList() {
+  return Object.entries(students).map(([k,v])=>({k,name:v.name,age:v.age||""})).sort((a,b)=>a.name.localeCompare(b.name));
+}
+function groupByLetter(list) {
+  const g={};
+  list.forEach(s=>{ const l=s.name[0].toUpperCase(); if(!g[l]) g[l]=[]; g[l].push(s); });
+  return g;
+}
+function buildAlphaNav(letters, scrollFn) {
+  if (letters.length<=1) return '';
+  return `<div class="alpha-index">${letters.map(l=>`<button class="alpha-btn" onclick="${scrollFn}('${l}')">${l}</button>`).join('')}</div>`;
+}
+
+// ── ATTENDANCE ─────────────────────────────────
+window.toggleAttendance = k => {
+  const today=new Date(); if(!isCampDay(today)) return;
+  const dk=fmtKey(today);
+  const cur=attendance[dk]&&attendance[dk][k];
+  set(ref(db,'attendance/'+dk+'/'+k), cur===1?0:1);
 };
 
-document.getElementById('childName').addEventListener('keypress', e => { if(e.key==='Enter') document.getElementById('childAge').focus(); });
-document.getElementById('childAge').addEventListener('keypress',  e => { if(e.key==='Enter') window.submitRegistration(); });
+function renderAttendance() {
+  document.getElementById('todayLabel').textContent = fmtDisplay(new Date());
+  const el=document.getElementById('attendanceList');
+  const ai=document.getElementById('alphaAtt');
+  const today=new Date(), dk=fmtKey(today);
+
+  if(today<CAMP_START){
+    ai.innerHTML='';
+    const diff=Math.ceil((CAMP_START-today)/86400000);
+    el.innerHTML=`<div class="notice-box"><div class="big">📅</div>Camp starts on <span class="hi">29 June 2026</span><br><span class="hi">${diff} days</span> to go!</div>`;
+    return;
+  }
+  if(today>CAMP_END){ ai.innerHTML=''; el.innerHTML=`<div class="notice-box"><div class="big">🏁</div>Camp ended. Check Record & Ranking.</div>`; return; }
+  if(!isCampDay(today)){ ai.innerHTML=''; el.innerHTML=`<div class="notice-box"><div class="big">🌙</div>Weekend — no camp today.<br>See you on <span class="hi">Monday</span>!</div>`; return; }
+
+  const list=getStudentList();
+  if(!list.length){ ai.innerHTML=''; el.innerHTML='<div class="empty-state">No students registered yet.</div>'; return; }
+
+  const groups=groupByLetter(list);
+  const letters=Object.keys(groups).sort();
+  ai.innerHTML=buildAlphaNav(letters,"scrollAttLetter");
+  el.innerHTML=letters.map(lt=>{
+    const hdr=`<div class="alpha-header" id="att_${lt}">${lt}</div>`;
+    const att=attendance[dk]||{};
+    return hdr+groups[lt].map(s=>{
+      const p=att[s.k]===1;
+      return `<div class="student-card ${p?'marked-present':''}">
+        <div class="avatar">${initials(s.name)}</div>
+        <div style="flex:1"><div class="s-name">${s.name}</div><div class="s-info">Age: ${s.age||'—'} yrs &nbsp;|&nbsp; ${p?'✅ Present':'⏳ Not marked'}</div></div>
+        <button class="btn-mark ${p?'btn-present':'btn-absent'}" onclick="toggleAttendance('${s.k}')">${p?'✓ Present':'Mark Present'}</button>
+      </div>`;
+    }).join('');
+  }).join('');
+}
+window.scrollAttLetter = l => { const e=document.getElementById('att_'+l); if(e) e.scrollIntoView({behavior:'smooth',block:'nearest'}); };
+
+// ── SUMMARY ───────────────────────────────────
+function renderSummary() {
+  const today=new Date(), dk=fmtKey(today);
+  const list=getStudentList();
+  const remaining=campDays.filter(d=>fmtKey(d)>dk).length;
+  let present=0,absent=0;
+  if(isCampDay(today)&&list.length){ const att=attendance[dk]||{}; present=list.filter(s=>att[s.k]===1).length; absent=list.length-present; }
+  document.getElementById('summaryStrip').innerHTML=`
+    <div class="summary-box"><div class="num">${list.length}</div><div class="lbl">Total Students</div></div>
+    <div class="summary-box"><div class="num">${present}</div><div class="lbl">Present Today</div></div>
+    <div class="summary-box"><div class="num red">${absent}</div><div class="lbl">Absent Today</div></div>
+    <div class="summary-box"><div class="num">${remaining}</div><div class="lbl">Days Remaining</div></div>`;
+}
+
+// ── STUDENTS ──────────────────────────────────
+window.addStudent = ()=>{
+  const inp=document.getElementById('studentInput');
+  const name=inp.value.trim(); if(!name) return;
+  const k=safeKey(name);
+  const exists=Object.values(students).some(s=>s.name.toLowerCase()===name.toLowerCase());
+  if(exists){ alert('This name already exists!'); return; }
+  set(ref(db,'students/'+k),{name,addedAt:Date.now()});
+  inp.value='';
+};
+window.removeStudent=(k,name)=>{ if(!confirm('Remove '+name+'?')) return; remove(ref(db,'students/'+k)); };
+
+function renderStudents() {
+  const list=getStudentList();
+  document.getElementById('studentCount').textContent=list.length;
+  const el=document.getElementById('studentMgmtList');
+  if(!list.length){ el.innerHTML='<div class="empty-state">No students yet.</div>'; return; }
+  const groups=groupByLetter(list); const letters=Object.keys(groups).sort();
+  el.innerHTML=letters.map(lt=>{
+    const hdr=`<div class="alpha-header">${lt}</div>`;
+    return hdr+groups[lt].map(s=>{
+      const total=campDays.filter(d=>attendance[fmtKey(d)]&&attendance[fmtKey(d)][s.k]===1).length;
+      const starsCount=stars[s.k]||0;
+      return `<div class="student-card">
+        <div class="avatar">${initials(s.name)}</div>
+        <div style="flex:1"><div class="s-name">${s.name}</div><div class="s-info">Age: ${s.age||'—'} yrs &nbsp;|&nbsp; Attendance: ${total} days &nbsp;|&nbsp; ⭐ ${starsCount}</div></div>
+        <button class="btn-del" onclick="removeStudent('${s.k}','${s.name.replace(/'/g,"\\'")}')">🗑</button>
+      </div>`;
+    }).join('');
+  }).join('');
+}
+
+// ── STARS ─────────────────────────────────────
+window.addStar    = k=>{ set(ref(db,'stars/'+k),(stars[k]||0)+1); };
+window.removeStar = k=>{ const v=stars[k]||0; if(v>0) set(ref(db,'stars/'+k),v-1); };
+
+function renderStars() {
+  const list=getStudentList();
+  const el=document.getElementById('starsList');
+  if(!list.length){ el.innerHTML='<div class="empty-state">No students yet.</div>'; return; }
+  const groups=groupByLetter(list); const letters=Object.keys(groups).sort();
+  el.innerHTML=letters.map(lt=>{
+    const hdr=`<div class="alpha-header">${lt}</div>`;
+    return hdr+groups[lt].map(s=>{
+      const cnt=stars[s.k]||0;
+      const starsDisplay='⭐'.repeat(Math.min(cnt,10))+(cnt>10?` +${cnt-10}`:'');
+      return `<div class="star-card">
+        <div class="avatar">${initials(s.name)}</div>
+        <div style="flex:1">
+          <div class="s-name">${s.name}</div>
+          <div style="font-size:14px;margin-top:3px">${cnt>0?starsDisplay:'No stars yet'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="star-count-display">${cnt}</span>
+          <div class="star-controls">
+            <button class="btn-star btn-star-sub" onclick="removeStar('${s.k}')">−</button>
+            <button class="btn-star btn-star-add" onclick="addStar('${s.k}')">⭐</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }).join('');
+}
+
+// ── POINTS ────────────────────────────────────
+window.addPoints = (k,inputId)=>{
+  const val=parseInt(document.getElementById(inputId).value)||0;
+  if(val===0) return;
+  const cur=points[k]||0;
+  set(ref(db,'points/'+k),cur+val);
+  document.getElementById(inputId).value='';
+};
+window.clearAllPoints = ()=>{
+  if(!confirm('Clear ALL points? This will reset everyone to 0.')) return;
+  set(ref(db,'points'),null);
+};
+
+function renderPoints() {
+  const list=getStudentList();
+  const el=document.getElementById('pointsList');
+  if(!list.length){ el.innerHTML='<div class="empty-state">No students yet.</div>'; return; }
+  const groups=groupByLetter(list); const letters=Object.keys(groups).sort();
+  el.innerHTML=letters.map(lt=>{
+    const hdr=`<div class="alpha-header">${lt}</div>`;
+    return hdr+groups[lt].map(s=>{
+      const pts=points[s.k]||0;
+      const inpId='pts_'+s.k;
+      return `<div class="points-card">
+        <div class="avatar">${initials(s.name)}</div>
+        <div style="flex:1">
+          <div class="s-name">${s.name}</div>
+          <div class="pts-session-note">Total: <strong>${pts} pts</strong></div>
+        </div>
+        <input type="number" id="${inpId}" class="pts-input" placeholder="+pts" min="0" onkeypress="if(event.key==='Enter')addPoints('${s.k}','${inpId}')"/>
+        <button class="btn-pts btn-pts-add" onclick="addPoints('${s.k}','${inpId}')">Add</button>
+      </div>`;
+    }).join('');
+  }).join('');
+}
+
+// ── RECORD ────────────────────────────────────
+function renderRecord() {
+  const today=new Date();
+  const pastDays=campDays.filter(d=>fmtKey(d)<=fmtKey(today));
+  const head=document.getElementById('recordHead'), body=document.getElementById('recordBody');
+  if(!pastDays.length){ head.innerHTML=''; body.innerHTML='<tr><td colspan="2" style="text-align:center;padding:16px;color:#111;">Camp starts 29 June 2026</td></tr>'; return; }
+  head.innerHTML='<tr><th>Name</th>'+pastDays.map(d=>`<th>${fmtShort(d)}</th>`).join('')+'<th>Total</th></tr>';
+  const list=getStudentList();
+  if(!list.length){ body.innerHTML=`<tr><td colspan="${pastDays.length+2}" style="text-align:center;padding:16px;">No students</td></tr>`; return; }
+  body.innerHTML=list.map(s=>{
+    const cells=pastDays.map(d=>{ const v=attendance[fmtKey(d)]&&attendance[fmtKey(d)][s.k]; return `<td>${v===1?'<span class="dot-p">✓</span>':'<span class="dot-a"></span>'}</td>`; }).join('');
+    const total=pastDays.filter(d=>attendance[fmtKey(d)]&&attendance[fmtKey(d)][s.k]===1).length;
+    return `<tr><td>${s.name}</td>${cells}<td><strong>${total}</strong></td></tr>`;
+  }).join('');
+}
+
+// ── RANKING ───────────────────────────────────
+function renderRanking() {
+  const list=getStudentList();
+  const attEl=document.getElementById('rankingList');
+  const starEl=document.getElementById('starRankingList');
+  if(!list.length){ attEl.innerHTML=starEl.innerHTML='<div class="empty-state">No students yet.</div>'; return; }
+
+  const pastDays=campDays.filter(d=>fmtKey(d)<=fmtKey(new Date()));
+  const maxDays=pastDays.length||1;
+  const medals=['gold','silver','bronze'];
+
+  // Attendance ranking
+  const attRanked=[...list].map(s=>({ name:s.name, count:pastDays.filter(d=>attendance[fmtKey(d)]&&attendance[fmtKey(d)][s.k]===1).length })).sort((a,b)=>b.count-a.count);
+  attEl.innerHTML=attRanked.map((s,i)=>{
+    const pct=Math.round(s.count/maxDays*100), m=medals[i]||null;
+    const icon=m==='gold'?'🥇':m==='silver'?'🥈':m==='bronze'?'🥉':i+1;
+    return `<div class="rank-card">
+      <div class="rank-num ${m||''}">${icon}</div>
+      <div style="flex:1"><div class="rank-name">${s.name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+          <div class="rank-bar" style="flex:1"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+          <span style="font-size:11px;color:#444">${pct}%</span>
+        </div>
+      </div>
+      <div class="rank-count">${s.count}/${maxDays}</div>
+    </div>`;
+  }).join('');
+
+  // Star ranking
+  const starRanked=[...list].map(s=>({name:s.name,cnt:stars[s.k]||0})).sort((a,b)=>b.cnt-a.cnt);
+  const maxStar=Math.max(...starRanked.map(s=>s.cnt),1);
+  starEl.innerHTML=starRanked.map((s,i)=>{
+    const pct=Math.round(s.cnt/maxStar*100), m=medals[i]||null;
+    const icon=m==='gold'?'🥇':m==='silver'?'🥈':m==='bronze'?'🥉':i+1;
+    return `<div class="rank-card" style="background:#fffdf0;border-color:#ffe082">
+      <div class="rank-num ${m||''}">${icon}</div>
+      <div style="flex:1"><div class="rank-name">${s.name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+          <div class="rank-bar" style="flex:1"><div class="rank-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,#ffd700,#f57f17)"></div></div>
+          <span style="font-size:11px;color:#444">${s.cnt} ⭐</span>
+        </div>
+      </div>
+      <div class="rank-count" style="color:#f57f17">${s.cnt} stars</div>
+    </div>`;
+  }).join('');
+}
+
+window.filterByAge = function() {
+  const from = parseInt(document.getElementById('ageFrom').value);
+  const to   = parseInt(document.getElementById('ageTo').value);
+  const el   = document.getElementById('ageGroupResult');
+
+  if (isNaN(from) || isNaN(to)) {
+    el.innerHTML = '<div class="empty-state">⚠️ Please enter both From and To age.</div>';
+    return;
+  }
+  if (from > to) {
+    el.innerHTML = '<div class="empty-state">⚠️ "From" age cannot be greater than "To" age.</div>';
+    return;
+  }
+
+  const list = getStudentList().filter(s => {
+    const age = parseInt(s.age);
+    return !isNaN(age) && age >= from && age <= to;
+  }).sort((a,b) => parseInt(a.age) - parseInt(b.age) || a.name.localeCompare(b.name));
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state">No students found between age ${from} and ${to}.</div>`;
+    return;
+  }
+
+  // Group by age
+  const byAge = {};
+  list.forEach(s => {
+    const a = s.age || '?';
+    if (!byAge[a]) byAge[a] = [];
+    byAge[a].push(s);
+  });
+
+  const colors = ['#e8f5e9','#e3f2fd','#fff8e1','#fce4ec','#f3e5f5','#e0f2f1'];
+  const borderColors = ['#52b788','#1976d2','#f9a825','#e91e63','#9c27b0','#009688'];
+
+  let html = `<div style="background:#2d6a4f;color:white;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:600;">
+    Found <strong>${list.length} student${list.length!==1?'s':''}</strong> between age ${from}–${to}
+  </div>`;
+
+  Object.keys(byAge).sort((a,b)=>parseInt(a)-parseInt(b)).forEach((age, idx) => {
+    const col = colors[idx % colors.length];
+    const bor = borderColors[idx % borderColors.length];
+    html += `<div style="margin-bottom:12px;">
+      <div style="background:${bor};color:white;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;margin-bottom:6px;display:inline-block;">
+        Age ${age} — ${byAge[age].length} student${byAge[age].length!==1?'s':''}
+      </div>`;
+    byAge[age].forEach((s, i) => {
+      html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${col};border:1.5px solid ${bor};border-radius:12px;margin-bottom:6px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:${bor};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;">${initials(s.name)}</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:700;color:#1a472a;">${s.name}</div>
+          <div style="font-size:11px;color:#444;margin-top:2px;">Age: ${s.age} yrs</div>
+        </div>
+        <div style="font-size:20px;font-weight:800;color:${bor};">#${i+1}</div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  el.innerHTML = html;
+};
+
+window.clearAgeFilter = function() {
+  document.getElementById('ageFrom').value = '';
+  document.getElementById('ageTo').value = '';
+  document.getElementById('ageGroupResult').innerHTML = '';
+};
+
+window.showSubTab = function(sub, btn) {
+  document.querySelectorAll('.sub-section').forEach(s => s.style.display='none');
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  const el = document.getElementById('sub-'+sub);
+  if(el) el.style.display='block';
+  if(btn) btn.classList.add('active');
+  if(sub==='groups') renderGroups();
+  if(sub==='pairs') renderPairs();
+  if(sub==='autogroup') previewAutoStudents();
+};
+
+// ── GROUPS ────────────────────────────────────
+let customGroups = {};
+let customPairs  = {};
+
+onValue(ref(db,'customGroups'), snap=>{ customGroups=snap.val()||{}; renderGroups(); });
+onValue(ref(db,'customPairs'),  snap=>{ customPairs=snap.val()||{};  renderPairs(); });
+
+window.createGroup = function() {
+  const inp = document.getElementById('newGroupName');
+  const name = inp.value.trim();
+  if(!name) return;
+  const k = 'grp_' + Date.now();
+  set(ref(db,'customGroups/'+k), {name, members:[], points:0});
+  inp.value='';
+};
+
+window.deleteGroup = function(k) {
+  if(!confirm('Delete this group?')) return;
+  remove(ref(db,'customGroups/'+k));
+};
+
+window.addGroupPoints = function(k, inputId) {
+  const val = parseInt(document.getElementById(inputId).value)||0;
+  if(!val) return;
+  const cur = customGroups[k]&&customGroups[k].points||0;
+  set(ref(db,'customGroups/'+k+'/points'), cur+val);
+  document.getElementById(inputId).value='';
+};
+
+window.addMemberToGroup = function(k, selectId) {
+  const sel = document.getElementById(selectId);
+  const memberKey = sel.value;
+  if(!memberKey) return;
+  const memberName = students[memberKey]&&students[memberKey].name;
+  if(!memberName) return;
+  const curMembers = customGroups[k]&&customGroups[k].members||[];
+  if(curMembers.find(m=>m.k===memberKey)) { alert('Already in group!'); return; }
+  const newMembers = [...curMembers, {k:memberKey, name:memberName}];
+  set(ref(db,'customGroups/'+k+'/members'), newMembers);
+  sel.value='';
+};
+
+window.removeMemberFromGroup = function(gk, mk) {
+  const curMembers = customGroups[gk]&&customGroups[gk].members||[];
+  const newMembers = curMembers.filter(m=>m.k!==mk);
+  set(ref(db,'customGroups/'+gk+'/members'), newMembers.length?newMembers:null);
+};
+
+function renderGroups() {
+  const el = document.getElementById('groupsList');
+  if(!el) return;
+  const list = Object.entries(customGroups);
+  if(!list.length) { el.innerHTML='<div class="empty-state">No groups yet. Create one above!</div>'; return; }
+  const studentList = getStudentList();
+  el.innerHTML = list.map(([k,g])=>{
+    const members = g.members||[];
+    const pts = g.points||0;
+    const inpId = 'gpts_'+k;
+    const selId = 'gsel_'+k;
+    const memberOptions = studentList.map(s=>`<option value="${s.k}">${s.name}</option>`).join('');
+    const memberChips = members.map(m=>`<span class="member-chip">${m.name}<button class="btn-remove-member" onclick="removeMemberFromGroup('${k}','${m.k}')">✕</button></span>`).join('');
+    return `<div class="group-card">
+      <div class="group-header">
+        <div>
+          <div class="group-name">👥 ${g.name}</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;">${members.length} member${members.length!==1?'s':''}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="group-pts">${pts} pts</div>
+          <button class="btn-del-group" onclick="deleteGroup('${k}')">🗑 Delete</button>
+        </div>
+      </div>
+      <div>${memberChips||'<span style="font-size:12px;color:#888;">No members yet</span>'}</div>
+      <div class="add-member-row">
+        <select id="${selId}" style="flex:1;padding:7px 10px;border:2px solid #c8e6c9;border-radius:8px;font-size:13px;outline:none;background:white;">
+          <option value="">+ Add student</option>${memberOptions}
+        </select>
+        <button onclick="addMemberToGroup('${k}','${selId}')" style="padding:7px 12px;background:#2d6a4f;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">Add</button>
+      </div>
+      <div class="pts-row">
+        <span style="font-size:12px;font-weight:600;color:#555;">Add Points:</span>
+        <input type="number" id="${inpId}" class="pts-small-input" placeholder="+pts" onkeypress="if(event.key==='Enter')addGroupPoints('${k}','${inpId}')"/>
+        <button class="btn-add-pts" onclick="addGroupPoints('${k}','${inpId}')">Add</button>
+        <button onclick="set(ref(db,'customGroups/${k}/points'),0)" style="padding:7px 10px;background:#fee2e2;color:#c0392b;border:none;border-radius:8px;font-size:11px;cursor:pointer;">Reset</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PAIRS ─────────────────────────────────────
+window.createPair = function() {
+  const name = document.getElementById('newPairName').value.trim();
+  const s1k  = document.getElementById('pairStudent1').value;
+  const s2k  = document.getElementById('pairStudent2').value;
+  if(!name)  { alert('Please enter a pair name!'); return; }
+  if(!s1k)   { alert('Please select Student 1!'); return; }
+  if(!s2k)   { alert('Please select Student 2!'); return; }
+  if(s1k===s2k) { alert('Please select two different students!'); return; }
+  const s1name = students[s1k]&&students[s1k].name||s1k;
+  const s2name = students[s2k]&&students[s2k].name||s2k;
+  const k = 'pair_' + Date.now();
+  set(ref(db,'customPairs/'+k), {name, s1:{k:s1k,name:s1name}, s2:{k:s2k,name:s2name}, points:0});
+  document.getElementById('newPairName').value='';
+  document.getElementById('pairStudent1').value='';
+  document.getElementById('pairStudent2').value='';
+};
+
+window.deletePair = function(k) {
+  if(!confirm('Delete this pair?')) return;
+  remove(ref(db,'customPairs/'+k));
+};
+
+window.addPairPoints = function(k, inputId) {
+  const val = parseInt(document.getElementById(inputId).value)||0;
+  if(!val) return;
+  const cur = customPairs[k]&&customPairs[k].points||0;
+  set(ref(db,'customPairs/'+k+'/points'), cur+val);
+  document.getElementById(inputId).value='';
+};
+
+function renderPairs() {
+  const el = document.getElementById('pairsList');
+  if(!el) return;
+
+  // Update dropdowns
+  const studentList = getStudentList();
+  const opts = '<option value="">Select student</option>' + studentList.map(s=>`<option value="${s.k}">${s.name}</option>`).join('');
+  const sel1 = document.getElementById('pairStudent1');
+  const sel2 = document.getElementById('pairStudent2');
+  if(sel1) sel1.innerHTML = opts;
+  if(sel2) sel2.innerHTML = opts;
+
+  const list = Object.entries(customPairs);
+  if(!list.length) { el.innerHTML='<div class="empty-state">No pairs yet. Create one above!</div>'; return; }
+
+  el.innerHTML = list.map(([k,p])=>{
+    const pts = p.points||0;
+    const inpId = 'ppts_'+k;
+    return `<div class="pair-card">
+      <div class="group-header">
+        <div>
+          <div class="group-name" style="color:#1565c0;">🤝 ${p.name}</div>
+          <div style="margin-top:6px;">
+            <span class="member-chip-pair">${p.s1&&p.s1.name||'?'}</span>
+            <span style="font-size:13px;color:#888;font-weight:700;">vs</span>
+            <span class="member-chip-pair">${p.s2&&p.s2.name||'?'}</span>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="group-pts" style="color:#1565c0;">${pts} pts</div>
+          <button class="btn-del-group" onclick="deletePair('${k}')">🗑 Delete</button>
+        </div>
+      </div>
+      <div class="pts-row">
+        <span style="font-size:12px;font-weight:600;color:#555;">Add Points:</span>
+        <input type="number" id="${inpId}" class="pts-small-input" placeholder="+pts" onkeypress="if(event.key==='Enter')addPairPoints('${k}','${inpId}')"/>
+        <button class="btn-add-pts" style="background:#1976d2;" onclick="addPairPoints('${k}','${inpId}')">Add</button>
+        <button onclick="set(ref(db,'customPairs/${k}/points'),0)" style="padding:7px 10px;background:#fee2e2;color:#c0392b;border:none;border-radius:8px;font-size:11px;cursor:pointer;">Reset</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.showTab=(tab,btn)=>{
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+  if(tab==='record') renderRecord();
+  if(tab==='ranking') renderRanking();
+  if(tab==='students') renderStudents();
+  if(tab==='stars') renderStars();
+  if(tab==='points') renderPoints();
+  if(tab==='agegroups') { document.getElementById('ageGroupResult').innerHTML=''; }
+  if(tab==='sunnahs') { buildAdminWeekBtns(); renderSunnahRanking(); }
+};
+
+// ── SUNNAH ADMIN ─────────────────────────────────
+const SUNNAH_ALL_CATS = [
+  { id:'eating',    sunnahs: 5 },
+  { id:'washroom',  sunnahs: 6 },
+  { id:'traveling', sunnahs: 6 },
+  { id:'wudu',      sunnahs: 6 },
+  { id:'sleeping',  sunnahs: 7 }
+];
+const SUNNAH_WEEK_CATS = [
+  ['eating'],
+  ['eating','washroom'],
+  ['eating','washroom','traveling'],
+  ['eating','washroom','traveling','wudu'],
+  ['eating','washroom','traveling','wudu','sleeping']
+];
+function sunnahMaxForWeek(wi){
+  return SUNNAH_WEEK_CATS[wi].map(id=>SUNNAH_ALL_CATS.find(c=>c.id===id).sunnahs).reduce((a,b)=>a+b,0)*7;
+}
+
+const SUNNAH_WEEKS = [];
+{
+  const start = new Date(2026,5,29);
+  for(let w=0;w<5;w++){
+    const wStart=new Date(start); wStart.setDate(start.getDate()+w*7);
+    const wEnd=new Date(wStart); wEnd.setDate(wStart.getDate()+6);
+    const capEnd=new Date(2026,6,31);
+    SUNNAH_WEEKS.push({num:w+1, start:new Date(wStart), end: wEnd>capEnd?capEnd:wEnd});
+  }
+}
+
+let sunnahAllData = {};
+let adminWeekIdx  = 0;
+onValue(ref(db,'sunnahs'), snap=>{ sunnahAllData=snap.val()||{}; renderSunnahRanking(); });
+
+function adminCurWeek() {
+  const t=new Date();
+  for(let i=0;i<SUNNAH_WEEKS.length;i++) if(t>=SUNNAH_WEEKS[i].start&&t<=SUNNAH_WEEKS[i].end) return i;
+  return t<SUNNAH_WEEKS[0].start?0:SUNNAH_WEEKS.length-1;
+}
+
+function buildAdminWeekBtns() {
+  if(adminWeekIdx===0&&document.getElementById('adminWeekBtns').innerHTML==='') adminWeekIdx=adminCurWeek();
+  const el=document.getElementById('adminWeekBtns');
+  if(!el) return;
+  el.innerHTML=SUNNAH_WEEKS.map((w,i)=>`<button onclick="selectAdminWeek(${i})" id="awbtn${i}"
+    style="padding:7px 12px;border:none;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;
+    background:${i===adminWeekIdx?'#ffd700':'rgba(45,106,79,.12)'};color:${i===adminWeekIdx?'#1a472a':'#2d6a4f'};border:1.5px solid ${i===adminWeekIdx?'#ffd700':'#c8e6c9'};">
+    Week ${w.num}<br><span style="font-size:9px;font-weight:500">${fmt2d(w.start)}–${fmt2d(w.end)}</span>
+  </button>`).join('');
+  const lbl=document.getElementById('adminWeekLbl');
+  if(lbl) { const w=SUNNAH_WEEKS[adminWeekIdx]; lbl.textContent=`📅 Week ${w.num}: ${fmt2d(w.start)} – ${fmt2d(w.end)}`; }
+}
+function fmt2d(d){ return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`; }
+
+window.selectAdminWeek=function(idx){
+  adminWeekIdx=idx;
+  buildAdminWeekBtns();
+  renderSunnahRanking();
+};
+
+function countStudentWeekTicks(studentKey, weekIdx) {
+  const wk='week'+(weekIdx+1);
+  const wd=(sunnahAllData[studentKey]||{})[wk]||{};
+  let total=0;
+  SUNNAH_WEEK_CATS[weekIdx].forEach(catId=>{
+    const cat=SUNNAH_ALL_CATS.find(c=>c.id===catId);
+    const cd=wd[catId]||{};
+    for(let si=0;si<cat.sunnahs;si++){
+      const sd=cd[si]||{};
+      for(let d=0;d<7;d++) if(sd[d]) total++;
+    }
+  });
+  return total;
+}
+
+function renderSunnahRanking() {
+  const el=document.getElementById('sunnahRankingList');
+  if(!el) return;
+  buildAdminWeekBtns();
+  const list=getStudentList();
+  if(!list.length){ el.innerHTML='<div class="empty-state">No students registered yet.</div>'; return; }
+  const ranked=[...list].map(s=>({name:s.name,k:s.k,ticks:countStudentWeekTicks(s.k,adminWeekIdx)})).sort((a,b)=>b.ticks-a.ticks);
+  const medals=['🥇','🥈','🥉'];
+  const maxTicks=Math.max(...ranked.map(r=>r.ticks),1);
+  el.innerHTML=ranked.map((s,i)=>{
+    const weekMax=sunnahMaxForWeek(adminWeekIdx); const pct=Math.round(s.ticks/weekMax*100);
+    const barPct=Math.round(s.ticks/maxTicks*100);
+    const medal=i<3?medals[i]:(i+1)+'';
+    const color=i===0?'#ffd700':i===1?'#c0c0c0':i===2?'#cd7f32':'#2d6a4f';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${i<3?'#fffdf0':'#f8fdf8'};border:1.5px solid ${i<3?'#ffe082':'#c8e6c9'};border-radius:14px;margin-bottom:8px;">
+      <div style="width:32px;height:32px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:${i<3?'18':'12'}px;font-weight:700;color:${i===1?'#333':'#fff'};flex-shrink:0;">${medal}</div>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:700;color:#1a472a;">${s.name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+          <div style="height:6px;flex:1;background:#e9ecef;border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${barPct}%;background:linear-gradient(90deg,#ffd700,#f57f17);border-radius:3px;"></div>
+          </div>
+          <span style="font-size:11px;color:#666;">${pct}%</span>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:${color==='#2d6a4f'?'#2d6a4f':color};white-space:nowrap;">${s.ticks}/${sunnahMaxForWeek(adminWeekIdx)}</div>
+    </div>`;
+  }).join('');
+}
+
+window.generateLinks=function(){
+  const base=document.getElementById('baseLinkInput').value.trim();
+  if(!base){ alert('Please paste the Sunnah_Tracker.html URL first!'); return; }
+  const list=getStudentList();
+  const el=document.getElementById('linksListArea');
+  if(!list.length){ el.innerHTML='<div class="empty-state">No students yet.</div>'; return; }
+  el.innerHTML=list.map(s=>{
+    const link=base+(base.includes('?')?'&':'?')+'s='+encodeURIComponent(s.k);
+    return `<div style="padding:8px 10px;background:#f8fdf8;border:1.5px solid #c8e6c9;border-radius:12px;margin-bottom:7px;">
+      <div style="font-size:14px;font-weight:700;color:#1a472a;margin-bottom:4px;">${s.name}</div>
+      <div style="font-size:10px;color:#555;word-break:break-all;background:#e8f5e9;padding:5px 8px;border-radius:7px;margin-bottom:5px;">${link}</div>
+      <button onclick="copyLink('${link.replace(/'/g,"\\'")}',this)" style="padding:6px 14px;background:#2d6a4f;color:white;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">📋 Copy Link</button>
+    </div>`;
+  }).join('');
+};
+
+window.copyLink=function(link,btn){
+  navigator.clipboard.writeText(link).then(()=>{ btn.textContent='✅ Copied!'; setTimeout(()=>btn.textContent='📋 Copy Link',1800); });
+};
+
+
+// ── AUTO-GROUP / COMPETITION ──────────────────────
+let autoMode = 'pairs';
+let autoFilteredStudents = null; // null = use all
+
+window.setAutoMode = function(mode) {
+  autoMode = mode;
+  ['pairs','3','2teams','custom'].forEach(m => {
+    const btn = document.getElementById('autoMode'+m.charAt(0).toUpperCase()+m.slice(1));
+    if(btn) { btn.style.background = m===mode ? '#2d6a4f' : '#f8fdf8'; btn.style.color = m===mode ? 'white' : '#1a472a'; btn.style.borderColor = m===mode ? '#2d6a4f' : '#c8e6c9'; }
+  });
+  document.getElementById('customSizeRow').style.display = mode==='custom' ? 'block' : 'none';
+};
+
+window.previewAutoStudents = function() {
+  const from = parseInt(document.getElementById('autoAgeFrom').value);
+  const to   = parseInt(document.getElementById('autoAgeTo').value);
+  const el   = document.getElementById('autoFilteredList');
+  let list   = getStudentList();
+
+  if(!isNaN(from) && !isNaN(to)) {
+    list = list.filter(s => { const a=parseInt(s.age); return !isNaN(a) && a>=from && a<=to; });
+  }
+  autoFilteredStudents = list.length ? list : null;
+
+  if(!list.length) { el.innerHTML='<div class="empty-state">No students match this age range.</div>'; return; }
+  el.innerHTML = `<div style="background:#e8f5e9;border-radius:10px;padding:8px 12px;font-size:12px;color:#1a472a;font-weight:600;">
+    ✅ ${list.length} student${list.length!==1?'s':''} selected: ${list.map(s=>s.name).join(', ')}
+  </div>`;
+};
+
+window.clearAutoFilter = function() {
+  document.getElementById('autoAgeFrom').value='';
+  document.getElementById('autoAgeTo').value='';
+  document.getElementById('autoFilteredList').innerHTML='';
+  autoFilteredStudents = null;
+};
+
+window.generateAutoGroups = function() {
+  const list = autoFilteredStudents || getStudentList();
+  if(list.length < 2) { alert('Need at least 2 students!'); return; }
+
+  const prefix = document.getElementById('autoTeamPrefix').value.trim() || 'Team';
+  const preview = document.getElementById('autoPreviewArea');
+
+  // Shuffle randomly
+  const shuffled = [...list].sort(()=>Math.random()-0.5);
+  let groups = [];
+
+  if(autoMode==='pairs') {
+    for(let i=0;i<shuffled.length;i+=2) groups.push(shuffled.slice(i,i+2));
+  } else if(autoMode==='3') {
+    for(let i=0;i<shuffled.length;i+=3) groups.push(shuffled.slice(i,i+3));
+  } else if(autoMode==='2teams') {
+    const half = Math.ceil(shuffled.length/2);
+    groups = [shuffled.slice(0,half), shuffled.slice(half)];
+  } else if(autoMode==='custom') {
+    const size = parseInt(document.getElementById('customGroupSize').value)||2;
+    for(let i=0;i<shuffled.length;i+=size) groups.push(shuffled.slice(i,i+size));
+  }
+
+  const colors=['#e8f5e9','#e3f2fd','#fff8e1','#fce4ec','#f3e5f5','#e0f2f1'];
+  const borders=['#52b788','#1976d2','#f9a825','#e91e63','#9c27b0','#009688'];
+
+  preview.innerHTML = `
+    <div style="background:#2d6a4f;color:white;border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;">
+      Preview — ${groups.length} group${groups.length!==1?'s':''} from ${list.length} students
+    </div>
+    ${groups.map((g,i)=>`
+      <div style="background:${colors[i%colors.length]};border:1.5px solid ${borders[i%borders.length]};border-radius:12px;padding:10px 12px;margin-bottom:8px;">
+        <div style="font-size:13px;font-weight:800;color:#1a472a;margin-bottom:6px;">${prefix} ${i+1} (${g.length} members)</div>
+        <div>${g.map(s=>`<span style="display:inline-flex;align-items:center;gap:4px;background:white;border:1px solid ${borders[i%borders.length]};border-radius:16px;padding:3px 10px;margin:2px;font-size:12px;font-weight:600;color:#1a472a;">${s.name}</span>`).join('')}</div>
+      </div>`).join('')}
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+      <button onclick="generateAutoGroups()" style="flex:1;padding:9px;background:#e9ecef;color:#555;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;">🔀 Reshuffle</button>
+      <button onclick="saveAutoGroups(${JSON.stringify(groups.map((g,i)=>({name:prefix+' '+(i+1),members:g})))})" style="flex:1;padding:9px;background:#2d6a4f;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">✅ Save All Teams</button>
+    </div>`;
+};
+
+window.saveAutoGroups = function(groupsData) {
+  if(!confirm('Save these ' + groupsData.length + ' teams to Firebase? They will appear in Groups tab.')) return;
+  groupsData.forEach(g => {
+    const k = 'grp_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const members = g.members.map(s=>({k:s.k,name:s.name}));
+    set(ref(db,'customGroups/'+k), {name:g.name, members, points:0});
+  });
+  alert('✅ Teams saved! Go to Groups tab to see them and add points.');
+  showSubTab('groups', document.getElementById('subtab-groups'));
+  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('subtab-groups').classList.add('active');
+};
+
+function renderAll() {
+  renderSummary(); renderAttendance();
+  const activeBtn=document.querySelector('.nav-tab.active');
+  if(activeBtn){
+    const m=activeBtn.getAttribute('onclick').match(/'(\w+)'/);
+    if(m){
+      if(m[1]==='record')   renderRecord();
+      if(m[1]==='ranking')  renderRanking();
+      if(m[1]==='students') renderStudents();
+      if(m[1]==='stars')    renderStars();
+      if(m[1]==='points')   renderPoints();
+      if(m[1]==='sunnahs')  { buildAdminWeekBtns(); renderSunnahRanking(); }
+    }
+  }
+}
 </script>
 </body>
 </html>
